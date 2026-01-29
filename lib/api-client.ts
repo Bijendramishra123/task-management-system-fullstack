@@ -1,6 +1,6 @@
 /**
  * API client with automatic token injection
- * Handles all API calls with proper headers and error handling
+ * FINAL SAFE VERSION – no baseURL at all
  */
 
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
@@ -10,8 +10,8 @@ class APIClient {
 
   constructor() {
     this.client = axios.create({
-      // ✅ ALWAYS RELATIVE — works on local + production
-      baseURL: '/api',
+      // 🔥 CRITICAL FIX:
+      // NO baseURL → browser automatically uses same origin
       headers: {
         'Content-Type': 'application/json',
       },
