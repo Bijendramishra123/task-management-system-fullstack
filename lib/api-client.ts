@@ -10,8 +10,7 @@ class APIClient {
 
   constructor() {
     this.client = axios.create({
-      // IMPORTANT:
-      // Use relative baseURL so it works in both local & production
+      // ✅ IMPORTANT: relative baseURL (works in local + production)
       baseURL: '/api',
       headers: {
         'Content-Type': 'application/json',
@@ -47,30 +46,18 @@ class APIClient {
     );
   }
 
-  /**
-   * GET request
-   */
   get<T = any>(url: string, config?: any) {
     return this.client.get<T>(url, config);
   }
 
-  /**
-   * POST request
-   */
   post<T = any>(url: string, data?: any, config?: any) {
     return this.client.post<T>(url, data, config);
   }
 
-  /**
-   * PATCH request
-   */
   patch<T = any>(url: string, data?: any, config?: any) {
     return this.client.patch<T>(url, data, config);
   }
 
-  /**
-   * DELETE request
-   */
   delete<T = any>(url: string, config?: any) {
     return this.client.delete<T>(url, config);
   }
