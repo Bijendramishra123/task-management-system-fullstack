@@ -10,14 +10,14 @@ class APIClient {
 
   constructor() {
     this.client = axios.create({
-      // ✅ IMPORTANT: relative baseURL (works in local + production)
+      // ✅ ALWAYS RELATIVE — works on local + production
       baseURL: '/api',
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-    // Add request interceptor to inject token
+    // Inject JWT token
     this.client.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         if (typeof window !== 'undefined') {
@@ -30,7 +30,7 @@ class APIClient {
       }
     );
 
-    // Add response interceptor for error handling
+    // Handle auth errors
     this.client.interceptors.response.use(
       (response) => response,
       (error) => {
