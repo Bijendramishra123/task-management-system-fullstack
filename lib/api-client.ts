@@ -10,29 +10,32 @@ class APIClient {
 
   constructor() {
     this.client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+      // IMPORTANT:
+      // Use relative baseURL so it works in both local & production
+      baseURL: '/api',
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
     // Add request interceptor to inject token
-    this.client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-      if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
+    this.client.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        if (typeof window !== 'undefined') {
+          const token = localStorage.getItem('accessToken');
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
         }
+        return config;
       }
-      return config;
-    });
+    );
 
     // Add response interceptor for error handling
     this.client.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
-          // Token expired or invalid
           if (typeof window !== 'undefined') {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('user');
